@@ -38,13 +38,32 @@ public class RequestWorker implements Runnable {
 	}
 
 	private void processRequest(Scanner scanner, PrintWriter writer) throws IOException {
+		String html = "<!DOCTYPE html> \n" +
+				"<html>\n" +
+				"<head>\n" +
+				"<title>Request</title>\n" +
+				"</head>\n" +
+				"<body>\n";
+
+
 		// scanner has the http-request present
 		while(scanner.hasNext()) {
-			System.out.println(scanner.nextLine());
+			html += "<p>";
+			html += scanner.nextLine();
+			html += "</p>\n";
 		}
+
+		html += "</body>\n" +
+				"</html>";
+
 		writer.println("HTTP/1.1 200 OK"); // status line
+		writer.println("Content-Type: text/html");
+		writer.println("Content-Length: " + html.length());
+		writer.println("Keep-Alive: timeout=5, max=99");
+		writer.println("Connection: Keep-Alive");
 		writer.println(); // empty line
-		writer.println("Hello, World!");
+
+        writer.print(html);
 		writer.flush(); // schickt buffer-inhalt über das netzwerk
 	}
 }
