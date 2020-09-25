@@ -38,23 +38,22 @@ public class RequestWorker implements Runnable {
 	}
 
 	private void processRequest(Scanner scanner, PrintWriter writer) throws IOException {
-		String html = "<!DOCTYPE html> \n" +
+		StringBuilder html = new StringBuilder("<!DOCTYPE html> \n" +
 				"<html>\n" +
 				"<head>\n" +
 				"<title>Request</title>\n" +
 				"</head>\n" +
-				"<body>\n";
+				"<body>\n");
 
 
 		// scanner has the http-request present
 		while(scanner.hasNext()) {
-			html += "<p>";
-			html += scanner.nextLine();
-			html += "</p>\n";
+			html.append("<p>");
+			html.append(scanner.nextLine());
+			html.append("</p>\n");
 		}
 
-		html += "</body>\n" +
-				"</html>";
+		html.append("</body>\n" + "</html>");
 
 		writer.println("HTTP/1.1 200 OK"); // status line
 		writer.println("Content-Type: text/html");
