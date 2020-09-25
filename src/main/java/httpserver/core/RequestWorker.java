@@ -47,10 +47,7 @@ public class RequestWorker implements Runnable {
 		try {
 			FileDeliverer.deliverFile(request.getPath(), response);
 		} catch (FileNotFoundException e){
-			response.setStatus(STATUS_NOT_FOUND);
-			response.addHeader(HEADER_CONTENT_TYPE, MIME_TYPE_TEXT_HTML);
-			response.writeBody("<html><header><meta charset='UTF-8'/></header>");
-			response.writeBody("<body><h1>" + e.toString() + "</h1></body><html>");
+		    FileDeliverer.deliverErrorFile(e.getMessage(), response);
 		}
 	}
 }
