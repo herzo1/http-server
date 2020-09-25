@@ -4,10 +4,7 @@ import httpserver.core.protocol.HttpConstants;
 import httpserver.core.protocol.HttpRequest;
 import httpserver.core.protocol.HttpResponse;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.PrintWriter;
+import java.io.*;
 import java.net.Socket;
 import java.util.Scanner;
 import java.util.logging.Logger;
@@ -47,7 +44,9 @@ public class RequestWorker implements Runnable {
 	}
 
 	private void processRequest(HttpRequest request, HttpResponse response) throws IOException {
-		if(!FileDeliverer.deliverFile(request.getPath(), response)){
+		try {
+			FileDeliverer.deliverFile(request.getPath(), response);
+		} catch (FileNotFoundException e){
 			response.setStatus(STATUS_NOT_FOUND);
 			response.addHeader(HEADER_CONTENT_TYPE, MIME_TYPE_TEXT_HTML);
 			response.writeBody("<html><header><meta charset='UTF-8'/></header>");
