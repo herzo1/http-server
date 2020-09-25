@@ -47,10 +47,11 @@ public class RequestWorker implements Runnable {
 	}
 
 	private void processRequest(HttpRequest request, HttpResponse response) throws IOException {
-	    String name = request.getParameter("name");
-	    response.setStatus(STATUS_OK);
-	    response.addHeader(HEADER_CONTENT_TYPE, MIME_TYPE_TEXT_HTML);
-		response.writeBody("<html><header><meta charset='UTF-8'/></header>");
-		response.writeBody("<body><h1>Hello " + name + "!</h1></body><html>");
+		if(!FileDeliverer.deliverFile(request.getPath(), response)){
+			response.setStatus(STATUS_NOT_FOUND);
+			response.addHeader(HEADER_CONTENT_TYPE, MIME_TYPE_TEXT_HTML);
+			response.writeBody("<html><header><meta charset='UTF-8'/></header>");
+			response.writeBody("<body><h1>404 File not found</h1></body><html>");
+		}
 	}
 }
