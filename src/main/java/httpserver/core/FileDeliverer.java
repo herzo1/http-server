@@ -24,7 +24,7 @@ public class FileDeliverer {
 		}
 		Path filePath = Paths.get(System.getProperty("document.root"), path);
 		if (!Files.exists(filePath) || !Files.isRegularFile(filePath)) {
-		    throw new FileNotFoundException("Path or File does not exist!");
+		    throw new FileNotFoundException("File was not found.");
 		}
 		logger.info("Delivering file " + filePath);
 		response.addHeader(HEADER_CONTENT_TYPE, Files.probeContentType(filePath));
