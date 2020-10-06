@@ -8,8 +8,6 @@ import java.io.IOException;
 import java.util.Properties;
 import java.util.logging.Logger;
 
-import static httpserver.core.protocol.HttpConstants.*;
-
 public class FrontController {
     private static final String ROUTE_FILE = "config/routes.properties";
     private static final Logger logger = Logger.getLogger(FrontController.class.getName());
@@ -35,23 +33,6 @@ public class FrontController {
         } catch (ReflectiveOperationException e) {
             logger.warning(e.toString());
             return null;
-        }
-    }
-
-    private static void processHelloRequest(HttpRequest request, HttpResponse response) throws IOException {
-        response.setStatus(STATUS_OK);
-        response.addHeader(HEADER_CONTENT_TYPE, MIME_TYPE_TEXT_HTML + ";charset=UTF-8");
-        if (request.isGet()) {
-            response.writeBody("<html><body><form action='hello' method='post'>Name: <input type='text' name='name' required='true'/><input type='submit' value='Say Hello'/></body></html>");
-        } else if(request.isPost()) {
-            String name = request.getParameter("name");
-            if (name == null || name.isEmpty()) {
-                name = "anybody";
-            }
-            String greeting = "Hello, " + name + ", how are you?";
-            response.setStatus(STATUS_OK);
-            response.addHeader(HEADER_CONTENT_TYPE, MIME_TYPE_TEXT_HTML + ";charset=UTF-8");
-            response.writeBody("<html><body><h1>" + greeting + "</h1></body></html>");
         }
     }
 }
