@@ -3,6 +3,7 @@ package httpserver.core;
 import httpserver.core.protocol.HttpConstants;
 import httpserver.core.protocol.HttpRequest;
 import httpserver.core.protocol.HttpResponse;
+import httpserver.framework.FrontController;
 
 import java.io.*;
 import java.net.Socket;
@@ -44,10 +45,24 @@ public class RequestWorker implements Runnable {
 	}
 
 	private void processRequest(HttpRequest request, HttpResponse response) throws IOException {
-		try {
-			FileDeliverer.deliverFile(request.getPath(), response);
-		} catch (FileNotFoundException e){
-		    FileDeliverer.deliverErrorFile(e.getMessage(), response);
+		boolean processed = FileDeliverer.deliverFile(request.getPath(), response);
+
+		if (!processed) {
+			try {
+				processed = FrontController.processRequest(request, response);
+			} catch (RuntimeException re) {
+				LOGGER.severe(re.toString());
+				re.printStackTrace();
+				response.setStatus(STATUS_INTERNAL_SERVER_ERROR);
+				response.writeBody("<html><body><h1>" + STATUS_INTERNAL_SERVER_ERROR + "</h1></body></html>");
+				processed = true;
+			}
+		}
+		if (!processed) {
+			response.setStatus(STATUS_NOT_FOUND);
+			response.addHeader(HEADER_CONTENT_TYPE, MIME_TYPE_TEXT_HTML);
+			response.writeBody("<html><header><meta charset='UTF-8'/></header>");
+			response.writeBody("<body><h1>" + STATUS_NOT_FOUND + "</h1></body><html>");
 		}
 	}
 }
