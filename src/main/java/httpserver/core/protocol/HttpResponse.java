@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
+import static httpserver.core.protocol.HttpConstants.HEADER_CONTENT_LENGTH;
 import static httpserver.core.protocol.HttpConstants.HEADER_CONTENT_TYPE;
 
 /**
@@ -63,7 +64,7 @@ public class HttpResponse {
 			writer.println(key + ": " + headers.get(key));
 		}
 		if (byteStream.size() > 0) {
-			writer.println(HEADER_CONTENT_TYPE + ": " + byteStream.size());
+			writer.println(HEADER_CONTENT_LENGTH + ": " + byteStream.size());
 		}
 		writer.println();
 		writer.flush();
