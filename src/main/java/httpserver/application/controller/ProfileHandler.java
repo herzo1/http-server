@@ -4,6 +4,8 @@ import httpserver.application.model.Profile;
 import httpserver.core.protocol.HttpRequest;
 import httpserver.core.protocol.HttpResponse;
 import httpserver.framework.RequestHandler;
+import httpserver.framework.Session;
+import httpserver.framework.SessionManager;
 
 public class ProfileHandler implements RequestHandler {
     private static final String COLOR = "color";
@@ -12,13 +14,16 @@ public class ProfileHandler implements RequestHandler {
 
     private static final String FILE = "profile.html";
 
-    private static Profile profile;
 
     @Override
     public String handleRequest(HttpRequest request, HttpResponse response) {
-        if(profile == null) {
-            profile = new Profile();
+        Session session = SessionManager.getSession(request, response);
+        if (session == null) {
+            session = SessionManager.createSession(request, response);
+            session.addData("profile", new Profile());
         }
+
+        Profile profile = (Profile) session.getData("profile");
 
         if (request.isPost()) {
             profile.setColor(request.getParameter(COLOR));
