@@ -19,10 +19,11 @@ public class ProfileHandler implements RequestHandler {
     public String handleRequest(HttpRequest request, HttpResponse response) {
         Session session = SessionManager.getSession(request, response);
         if (session == null) {
-            session = SessionManager.createSession(request, response);
-            session.addData("profile", new Profile());
+            response.addParameter("message", "");
+            return "login.html";
         }
 
+        User user (User) session.getData("user");
         Profile profile = (Profile) session.getData("profile");
 
         if (request.isPost()) {
