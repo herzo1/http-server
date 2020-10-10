@@ -1,6 +1,7 @@
 package httpserver.application.controller;
 
 import httpserver.application.model.Profile;
+import httpserver.application.model.User;
 import httpserver.core.protocol.HttpRequest;
 import httpserver.core.protocol.HttpResponse;
 import httpserver.framework.RequestHandler;
@@ -23,7 +24,7 @@ public class ProfileHandler implements RequestHandler {
             return "login.html";
         }
 
-        User user (User) session.getData("user");
+        User user = (User) session.getData("user");
         Profile profile = (Profile) session.getData("profile");
 
         if (request.isPost()) {

@@ -1,5 +1,7 @@
 package httpserver.application.controller;
 
+import httpserver.application.model.User;
+import httpserver.application.model.UserManager;
 import httpserver.core.protocol.HttpRequest;
 import httpserver.core.protocol.HttpResponse;
 import httpserver.framework.RequestHandler;
@@ -14,7 +16,7 @@ public class LoginHandler implements RequestHandler {
             response.addParameter("message", "");
             return "login.html";
         }
-
+        System.out.println(request.getParameterNames());
         String username = request.getParameter("name");
         String password = request.getParameter("password");
         try {
